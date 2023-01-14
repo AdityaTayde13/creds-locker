@@ -1,7 +1,7 @@
 import sqlite3
 import sys
 
-def add(username, passhash):
+def addToDB(username, passhash):
    try:
        # Connect to DB and create a cursor
       sqliteConnection = sqlite3.connect('sql.db')
@@ -24,7 +24,7 @@ def add(username, passhash):
            sqliteConnection.close()
 
 
-def view():
+def viewFromDB():
    try:
       # Connect to DB and create a cursor
         sqliteConnection = sqlite3.connect('sql.db')

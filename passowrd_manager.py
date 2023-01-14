@@ -1,16 +1,17 @@
 import sys
+from database_manager import addToDB
+from database_manager import viewFromDB
 
-un_pass_dict = {}
 
 def addLogin():
     username = input("Username: ")
     password = input("Password: ")
-    un_pass_dict[username] = password
+    addToDB(username,password)
 
 def viewLogins():
-    sys.stdout.write("| username | password ")
-    for k, v in un_pass_dict.items():
-        sys.stdout.write(" | %s  | %s \n" % (k, v))
+    ans = viewFromDB()
+    for tup in ans:
+        print(tup[0], tup[1], sep="\n")
 
 password = input("Enter the master passowrd:- ")
 if password == "abcd":
