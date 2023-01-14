@@ -2,23 +2,27 @@ import sys
 from database_manager import addToDB, viewFromDB, masterStore, masterRetrieve 
 from encryption import hashMaster
 import os
+import getpass
 
 def addLogin():
     username = input("Username: ")
-    password = input("Password: ")
+    password = input("Password: ").strip()
     addToDB(username,password)
 
 def viewLogins():
     ans = viewFromDB()
+    colwid1 = max([len(tup[0]) for tup in ans])
+    colwid2 = max([len(tup[1]) for tup in ans])
+    print("| {:<{}} | {:<{}} |".format('username', colwid1, 'password', colwid2))
     for tup in ans:
-        print(tup[0], tup[1], sep="\n")
+        print(f"| {tup[0]:<{colwid1}} | {tup[1]:<{colwid2}} |")
 
 def firstRun():
     if os.path.exists("sql.db") == False:
         sys.stdout.write("No creds-locker database found!!\n")
         num = int(input("Press 1, if you are New user\nPress 2, to exit\n"))
         if num==1:
-            password = input("Enter new master passowrd: ")
+            password = getpass.getpass(prompt='Enter new master passowrd:')
             encryptedPass = hashMaster(password)
             masterStore(encryptedPass)
         elif num==2:
@@ -26,7 +30,7 @@ def firstRun():
             sys.exit()
 
 def checkMasterPass():
-    password = input("Enter the master passowrd:- ")
+    password = getpass.getpass(prompt='Enter your master passowrd:')
     encryptedPass = hashMaster(password)
     correcthash = masterRetrieve()
     if encryptedPass==correcthash.lower():
